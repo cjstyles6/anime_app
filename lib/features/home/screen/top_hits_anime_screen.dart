@@ -1,9 +1,7 @@
 import 'package:anime_app/common/widgets/anime_appbar.dart';
-import 'package:anime_app/common/widgets/anime_button.dart';
 import 'package:anime_app/common/widgets/score_card.dart';
 import 'package:anime_app/features/home/controller/home_controller.dart';
 import 'package:anime_app/routes/app_routes.dart';
-import 'package:anime_app/utils/constants/colors.dart';
 import 'package:anime_app/utils/helpers/navigation_helpers.dart';
 import 'package:anime_app/utils/sizes.dart';
 import 'package:awesome_extensions/awesome_extensions.dart';
@@ -13,15 +11,12 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
 import 'package:ionicons/ionicons.dart';
 
-import '../../my_list/controller/my_list_controller.dart';
-
 class TopHitsAnimeScreen extends StatelessWidget {
   const TopHitsAnimeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     HomeController controller = Get.find();
-    MyListController myListController = Get.put(MyListController());
 
     return Scaffold(
       body: SafeArea(
@@ -118,18 +113,18 @@ class TopHitsAnimeScreen extends StatelessWidget {
                                 anime.studios?.first.name ?? 'Unknown Studio',
                               ).textColor(Colors.grey),
                               10.heightBox,
-                              SizedBox(
-                                width: 150,
-                                child: AnimeButton(
-                                  text: 'My List',
-                                  bgColor: primaryColor,
-                                  icon: const Icon(Ionicons.add,
-                                      color: Colors.white),
-                                  onPressed: () {
-                                    myListController.addAnime(anime);
-                                  },
-                                ),
-                              ),
+                              // SizedBox(
+                              //   width: 150,
+                              //   child: AnimeButton(
+                              //     text: 'My List',
+                              //     bgColor: primaryColor,
+                              //     icon: const Icon(Ionicons.add,
+                              //         color: Colors.white),
+                              //     onPressed: () {
+                              //       myListController.addAnime(anime);
+                              //     },
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),

@@ -158,23 +158,37 @@ class AnimeDetailsScreen extends StatelessWidget {
                             _handleWatchTrailer(animeData?.malId ?? 5),
                       ),
                       5.widthBox,
-                      AnimeButton(
-                        text: 'My List',
-                        icon: const Icon(Ionicons.add, color: Colors.white),
-                        borderColor: primaryColor,
-                        onPressed: () {
-                          if (animeData != null) {
-                            final datumAnime = animeData.toDatum();
-                            myListController.addAnime(datumAnime);
-                          } else {
-                            Get.snackbar(
-                              'Error',
-                              'Unable to add anime to list',
-                              backgroundColor: Colors.red.withOpacity(0.3),
-                              colorText: Colors.white,
-                            );
-                          }
-                        },
+                      Row(
+                        children: [
+                          AnimeButton(
+                            text: 'Watch Trailer',
+                            bgColor: primaryColor,
+                            icon: const Icon(Ionicons.play_circle,
+                                color: Colors.white),
+                            onPressed: () =>
+                                _handleWatchTrailer(animeData?.malId ?? 5),
+                          ),
+                          5.widthBox,
+                          // My List button with dynamic icon based on list status
+                          AnimeButton(
+                            text: myListController.isAnimeInList(animeData!)
+                                ? 'Remove from List'
+                                : 'My List',
+                            icon: Icon(
+                                myListController.isAnimeInList(animeData)
+                                    ? Ionicons.remove
+                                    : Ionicons.add,
+                                color: Colors.white),
+                            borderColor: primaryColor,
+                            onPressed: () {
+                              if (myListController.isAnimeInList(animeData)) {
+                                myListController.removeAnime(animeData);
+                              } else {
+                                myListController.addAnime(animeData);
+                              }
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -190,7 +204,7 @@ class AnimeDetailsScreen extends StatelessWidget {
                       child: _buildSynopsisSection(
                         context,
                         controller,
-                        animeData?.synopsis,
+                        animeData.synopsis,
                       ),
                     ),
                   20.heightBox,

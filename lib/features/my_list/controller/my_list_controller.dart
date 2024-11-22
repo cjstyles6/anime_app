@@ -1,34 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'dart:convert';
-import 'package:anime_app/features/home/models/top_anime/datum.dart';
+import 'package:anime_app/features/details/model/full_anime/full_anime.dart';
 
 class MyListController extends GetxController {
-  final myAnimeList = <Datum>[].obs;
-  final storage = GetStorage();
-  final String storageKey = 'myAnimeList';
+  // Observable list to store anime in the user's list
+  final RxList<Data> myAnimeList = <Data>[].obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    loadAnimeList();
-  }
-
-  void addAnime(Datum anime) {
-    // Check if anime already exists in the list
-    if (!myAnimeList.any((element) => element.malId == anime.malId)) {
+  // Method to add an anime to the list
+  void addAnime(Data anime) {
+    // Check if the anime is already in the list to prevent duplicates
+    if (!myAnimeList
+        .any((existingAnime) => existingAnime.malId == anime.malId)) {
       myAnimeList.add(anime);
       Get.snackbar(
-        'Added',
-        'Successfully added ${anime.titleEnglish ?? 'anime'} to my list',
+        'Added to List',
+        'Successfully added ${anime.titleEnglish ?? anime.title ?? 'anime'} to my list',
         backgroundColor: Colors.green.withOpacity(0.3),
         colorText: Colors.white,
       );
-      saveAnimeList();
     } else {
       Get.snackbar(
-        'Already Added',
+        'Already in List',
         '${anime.titleEnglish ?? anime.title ?? 'Anime'} is already in your list',
         backgroundColor: Colors.orange.withOpacity(0.3),
         colorText: Colors.white,
@@ -36,23 +28,15 @@ class MyListController extends GetxController {
     }
   }
 
-  void removeAnime(Datum anime) {
-    myAnimeList.removeWhere((element) => element.malId == anime.malId);
-    saveAnimeList();
+  // Method to remove an anime from the list
+  void removeAnime(Data anime) {
+    myAnimeList
+        .removeWhere((existingAnime) => existingAnime.malId == anime.malId);
   }
 
-  void saveAnimeList() {
-    final List<String> encodedList =
-        myAnimeList.map((anime) => jsonEncode(anime.toJson())).toList();
-    storage.write(storageKey, encodedList);
-  }
-
-  void loadAnimeList() {
-    final List<dynamic>? storedList = storage.read<List<dynamic>>(storageKey);
-    if (storedList != null) {
-      myAnimeList.value = storedList
-          .map((animeJson) => Datum.fromJson(jsonDecode(animeJson.toString())))
-          .toList();
-    }
+  // Method to check if an anime is already in the list
+  bool isAnimeInList(Data anime) {
+    return myAnimeList
+        .any((existingAnime) => existingAnime.malId == anime.malId);
   }
 }

@@ -55,7 +55,7 @@ class HomeAppbar extends StatelessWidget {
       );
 
       // Add the anime to MyList
-      myListController.addAnime(anime);
+      // myListController.addAnime(anime);
     }
 
     final randomAnime = controller.getRandomAnime();
